@@ -9,7 +9,8 @@ app = Client("auth_bot", api_id=settings.api_id, api_hash=settings.api_hash,
 
 
 def state_filter(state):
-    async def func(flt,_,message):
+    async def func(flt, _, message):
+        print(user_states)
         return user_states.get(message.from_user.id, 'unknown') == flt.state
     return filters.create(func, state=state)
 
@@ -34,11 +35,11 @@ async def start(client, message):
 async def handle_contact(client, message):
     await controller.phone_handle(message.contact.phone_number)
     await message.reply(text='Введите полученный код')
+    user_states[message.from_user.id] = 'sent_code'
 
 
-@app.on_message(filters.text & state_filter('sent_code'))
+@app.on_message(state_filter('sent_code'))
 async def handle_code(client, message: Message):
-    print(message)
     await controller.code_handle(message.text)
 
 app.run()
