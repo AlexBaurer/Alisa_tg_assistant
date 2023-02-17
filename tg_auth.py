@@ -42,4 +42,3 @@ async def handle_contact(client, message):
 async def handle_code(client, message: Message):
     await controller.code_handle(message.text)
 
-app.run()

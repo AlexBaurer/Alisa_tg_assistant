@@ -1,5 +1,6 @@
 import asyncio
 import pyrogram
+import typing
 from settings import settings
 from pyrogram import Client
 from pyrogram.types import User
@@ -8,7 +9,7 @@ from pyrogram import raw
 
 async def create_client(user_phone):
     client = TgClient('client', api_id=settings.api_id, api_hash=settings.api_hash,
-                      phone_number=user_phone, test_mode=True)
+                      phone_number=user_phone, test_mode=False)
     await client.connect()
     await client.authorize()
     return client
@@ -50,7 +51,4 @@ class TgClient(Client):
         await self.send_message('me', 'hui')
         async for dialog in self.get_dialogs():
             print(dialog.chat.title or dialog.chat.first_name)
-
-
-
 
