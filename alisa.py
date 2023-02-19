@@ -45,11 +45,8 @@ async def alisa_post(request: Request):
     return response
 
 
-if __name__ == '__main__':
-    print('GOOOOOO!!')
-    import uvicorn
-    from controller import controller
+@app.on_event('startup')
+async def startup():
     from tg_auth import app as telegram_auth
 
     telegram_auth.start()
-    uvicorn.run("alisa:app", host="127.0.0.1", port=8000, log_level="info")
