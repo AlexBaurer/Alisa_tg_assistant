@@ -34,6 +34,7 @@ app = FastAPI()
 async def alisa_post(request: Request):
     print(request)
     # print(response)
+    # TODO проверяем есть ли у нас такой чело
     if user := get_user(request.session.user.user_id) is not None:
         dialogs = await controller.alisa_request_handler(user)
         response = Response(response={
@@ -45,11 +46,8 @@ async def alisa_post(request: Request):
     return response
 
 
-if __name__ == '__main__':
-    print('GOOOOOO!!')
-    import uvicorn
-    from controller import controller
-    from tg_auth import app as telegram_auth
+@app.on_event('startup')
+async def startup():
+    from auth.telegram_auth import app as telegram_auth
 
     telegram_auth.start()
-    uvicorn.run("alisa:app", host="127.0.0.1", port=8000, log_level="info")
